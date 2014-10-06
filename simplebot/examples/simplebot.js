@@ -1,13 +1,9 @@
 // =======================
-// Derived from the work done by @makenai on the
-// SumoBot Jr
+// Derived from the work done by @makenai on the SumoBot Jr
 // =======================
 
 var five = require("johnny-five");
 var keypress = require('keypress');
-
-var RSTOPVAL = 93;
-var LSTOPVAL = 90;
 
 var opts = {};
 opts.port = process.argv[2] || "";
@@ -18,7 +14,7 @@ var board = new five.Board(opts);
 
 board.on("ready", function() {
 
-    console.log("Control the bot with the arrow keys, and SPACE to stop.")
+    console.log("Control the bot with the arrow keys, SPACE to stop, Q to exit.")
 
     var left_wheel  = new five.Servo({ pin:  9, type: 'continuous' });
     var right_wheel = new five.Servo({ pin: 8, type: 'continuous'  });
@@ -61,15 +57,8 @@ board.on("ready", function() {
         } else if ( key.name == 'space' ) {
 
             console.log('Stopping');
-            left_wheel.to(LSTOPVAL);
-            right_wheel.to(RSTOPVAL);
-
+            left_wheel.to(90);
+            right_wheel.to(90);
         }
     });
 });
-
-board.on("error", function(err) {
-    console.log(err.message);
-    process.exit();
-});
-
