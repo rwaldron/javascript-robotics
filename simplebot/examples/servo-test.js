@@ -26,8 +26,8 @@ board.on("ready", function() {
             delay: 5000,
             task: function() {
                 console.log("going forward");
-                left_wheel.cw();
-                right_wheel.ccw();
+                left_wheel.ccw();
+                right_wheel.cw();
             },
         },
         {
@@ -42,8 +42,8 @@ board.on("ready", function() {
             delay: 3000,
             task: function() {
                 console.log("going backward");
-                left_wheel.ccw();
-                right_wheel.cw();
+                left_wheel.cw();
+                right_wheel.ccw();
             },
         },
         {
