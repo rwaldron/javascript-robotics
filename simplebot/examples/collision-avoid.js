@@ -18,54 +18,66 @@ board.on("ready", function() {
     forward();
 
     ping.on("change", function() { //<2>
-        if (this.cm < 15 && state != "DRIVING") {
+        if (this.cm < 15 && state == "DRIVING") {
             state = "AVOID_COLLISION";
-
             temporal.queue([ //<3>
                 {
                     // stop dead
-                    task: function() {
-                        left_wheel.stop();
-                        right_wheel.stop();
-                    },
+                    delay: 10,
+                    task: stop,
                 },
                 {
                     // back up
-                    delay: 500
-                    task: function() {
-                        backward();
-                    },
+                    delay: 3000,
+                    task: backward,
+                },
+                {
+                    // stop
+                    delay: 1500,
+                    task: stop,
                 },
                 {
                     // spin
-                    delay: 1000
-                    task: function() {
-                        left_wheel.cw();
-                        right_wheel.cw();
-                    },
+                    delay: 3000,
+                    task: spin, 
                 },
                 {
-                    // back up
-                    delay: 1500
-                    task: function() {
-                        forward(); //<4>
-                        state = "DRIVING";
-                    },
+                    // stop
+                    delay: 1000,
+                    task: stop,
+                },
+                {
+                    // fwd
+                    delay: 3000,
+                    task: forward, //<4>
                 },
             ])
         }
     });
 
-
     // helper functions for driving.
     function forward() {
+        console.log("forward");
+        state = "DRIVING";
         left_wheel.cw();
         right_wheel.ccw();
     }
 
     function backward() {
+        console.log("back");
         left_wheel.ccw();
         right_wheel.cw();
     }
 
+    function stop() {
+        console.log("stop");
+        left_wheel.to(92);
+        right_wheel.to(94);
+    }
+
+    function spin() {
+        console.log("spin");
+        left_wheel.cw();
+        right_wheel.cw();
+    }
 });

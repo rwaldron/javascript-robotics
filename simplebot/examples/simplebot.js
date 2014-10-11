@@ -33,14 +33,14 @@ board.on("ready", function() {
         } else if ( key.name == 'up' ) {
 
             console.log('Forward');
-            left_wheel.ccw();
-            right_wheel.cw();
+            left_wheel.cw();
+            right_wheel.ccw();
 
         } else if ( key.name == 'down' ) {
 
             console.log('Backward');
-            left_wheel.cw();
-            right_wheel.ccw();      
+            left_wheel.ccw();
+            right_wheel.cw();      
 
         } else if ( key.name == 'left' ) {
 
