@@ -1,0 +1,11 @@
+{
+  "name": "cheerful-j5",
+  "version": "1.0.0",
+  "description": "Query Cheerlights and update an RGB LED using Johnny-Five",
+  "dependencies": {
+    "johnny-five": "^0.8.14",
+    "node-tweet-stream": "^1.4.0",
+    "request": "^2.45.0",
+    "spark-io": "^0.5.1"
+  }
+}
