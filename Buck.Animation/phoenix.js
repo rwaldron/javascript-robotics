@@ -149,6 +149,7 @@ board = new five.Board().on("ready", function() {
 
   var legsAnimation = new five.Animation(phoenix.legs);
 
+  // From sleep to stand
   var stand = {
     target: phoenix.altJoints,
     duration: 500,
@@ -166,6 +167,7 @@ board = new five.Board().on("ready", function() {
     ]
   };
 
+  // From stand to sleep
   var sleep = {
     duration: 500,
     cuePoints: [0, 0.5, 1.0],
@@ -181,6 +183,7 @@ board = new five.Board().on("ready", function() {
     ]
   };
 
+  // Wave right tibia
   var waveRight = {
     duration: 1500,
     cuePoints: [0, 0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
@@ -195,6 +198,7 @@ board = new five.Board().on("ready", function() {
     ]
   };
 
+  // Wave left tibia
   var waveLeft = {
     duration: 1500,
     cuePoints: [0, 0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
@@ -209,6 +213,7 @@ board = new five.Board().on("ready", function() {
     ]
   };
 
+  // Tripod gait
   phoenix.run = function(dir) {
     var a = dir === "rev" ? 0 : 2,
       b = dir === "rev" ? 2 : 0;
@@ -249,6 +254,7 @@ board = new five.Board().on("ready", function() {
     return this;
   };
 
+  // Two leg gait
   var walk = {
     duration: 2000,
     cuePoints: [0, 0.071, 0.143, 0.214, 0.286, 0.357, 0.429, 0.5, 0.571, 0.643, 0.714, 0.786, 0.857, 0.929, 1],
@@ -284,6 +290,7 @@ board = new five.Board().on("ready", function() {
     ]
   };
 
+  // One leg gait
   var crawl = {
     duration: 2000,
     cuePoints: [0, 0.071, 0.143, 0.214, 0.286, 0.357, 0.429, 0.5, 0.542, 0.583, 0.625, 0.667, 0.708, 0.75, 0.792, 0.833, 0.875, 0.917, 0.958, 1],
@@ -319,6 +326,7 @@ board = new five.Board().on("ready", function() {
     ]
   };
 
+  // Wave gait
   phoenix.row = function(dir) {
     var a = dir === "rev" ? 2 : 0,
       b = dir === "rev" ? 0 : 2;
@@ -350,6 +358,7 @@ board = new five.Board().on("ready", function() {
     return this;
   };
 
+  // Show gait with COG outside of polygon formed by legs
   phoenix.badRow = function(dir) {
     var a = dir === "rev" ? 2 : 0,
       b = dir === "rev" ? 0 : 2;
@@ -379,6 +388,7 @@ board = new five.Board().on("ready", function() {
     return this;
   };
 
+  // Tripod turn
   phoenix.turn = function(dir) {
     var a = dir === "left" ? 0 : 2,
       b = dir === "left" ? 2 : 0;
@@ -421,6 +431,7 @@ board = new five.Board().on("ready", function() {
 
   };
 
+  // Return phoenix to home position
   phoenix.att = function() {
     var most = 0, grouped, mostIndex, ani, work = [
       { name: "r1", offset: 0, home: h.f.f[1], thome: h.f.t[1], chome: h.f.c[1]},
@@ -431,6 +442,7 @@ board = new five.Board().on("ready", function() {
       { name: "l3", offset: 0, home: h.r.f[1], thome: h.r.t[1], chome: h.r.c[1] }
     ];
 
+    // Loop through legs and find how far each is from "home"
     work.forEach(function(leg, i) {
       work[i].offset = Math.abs(phoenix[leg.name+"f"].last.reqDegrees - leg.home);
     });
