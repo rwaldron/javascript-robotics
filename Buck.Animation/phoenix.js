@@ -7,7 +7,7 @@
  * http://arduino.cc/en/Main/ArduinoBoardMegaADK
  * http://www.dfrobot.com/index.php?route=product/product&path=35_124&product_id=560
  *
- * You will want to update a couple of things if you are going to use this code:
+ * You will want to update a couple of things for your robot:
  * 1. You can tweak your walk with the "lift", "h" and "s" objects.
  * 2. You can trim your servos by changing the offset values on each servo
  *
@@ -45,8 +45,7 @@
   },
 
   // This object contains the home positions of each
-  // servo in its forward, mid and rear position for
-  // walking.
+  // servo for the seven steps in walk and crawl.
   s = {
     f: {
       c: [56, 59, 65, 70, 76, 82, 91],
@@ -448,9 +447,9 @@ board = new five.Board().on("ready", function() {
     });
 
     if (work[1].offset > work[4].offset) {
-      grouped = [ [0, 2, 4], [1, 3, 5] ];
-    } else {
       grouped = [ [1, 3, 5], [0, 2, 4] ];
+    } else {
+      grouped = [ [0, 2, 4], [1, 3, 5] ];
     }
 
     grouped.forEach(function(group, i) {
@@ -516,7 +515,5 @@ board = new five.Board().on("ready", function() {
   this.repl.inject({
      ph: phoenix
   });
-
-  phoenix.sleep();
 
 });
