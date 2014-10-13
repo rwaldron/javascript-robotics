@@ -1,0 +1,9 @@
+{
+  "name": "TypeBot",
+  "version": "1.0.1",
+  "description": "A typing robot",
+  "dependencies": {
+    "johnny-five": "^0.8.14"
+  },
+  "author": "Bryan Hughes <bryan@theoreticalideations.com>"
+}
