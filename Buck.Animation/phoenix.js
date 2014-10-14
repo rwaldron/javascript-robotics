@@ -44,6 +44,25 @@
     }
   },
 
+  // This object contains our end effector positions for turns
+  t = {
+    f: {
+      c: [47, 70, 93 ],
+      f: [122, 120, 116],
+      t: [117, 110, 97]
+    },
+    m: {
+      c: [65, 88, 113],
+      f: [117, 117, 117],
+      t: [101, 106, 103]
+    },
+    r: {
+      c: [47, 70, 93 ],
+      f: [122, 120, 116],
+      t: [117, 110, 97]
+    }
+  },
+
   // This object contains the home positions of each
   // servo for the seven steps in walk and crawl.
   s = {
@@ -68,7 +87,7 @@
   l = {
     c: 90,
     f: 165,
-    t: 170
+    t: 150
   };
 
 board = new five.Board().on("ready", function() {
@@ -159,26 +178,27 @@ board = new five.Board().on("ready", function() {
       phoenix.state = "stand";
     },
     keyFrames: [
-      [null, { degrees: h.m.c[1] }],
-      [null, { degrees: h.f.c[1] }],
-      [null, false, false, { degrees: h.f.f[1] + 26, easing: easeOut}, { degrees: h.f.f[1], easing: easeIn}],
-      [null, false, { degrees: h.f.t[1] + 13}, false, { degrees: h.f.t[1] }]
+      [null, false, { degrees: h.m.c[1] }],
+      [null, false, { degrees: h.f.c[1] }],
+      [null, false, false, { degrees: h.f.f[1] + 20, easing: easeOut}, { degrees: h.f.f[1], easing: easeIn}],
+      [null, { degrees: h.f.t[1]}, false, { degrees: h.f.t[1] }]
     ]
   };
 
   // From stand to sleep
   var sleep = {
     duration: 500,
-    cuePoints: [0, 0.5, 1.0],
+    cuePoints: [0, 0.5, 0.75, 1.0],
     fps: 100,
-    target: phoenix.joints,
+    target: phoenix.altJoints,
     oncomplete: function() {
       phoenix.state = "sleep";
     },
     keyFrames: [
-      [null, false, { degrees: l.c, easing: easeOut }],
-      [null, { degrees: l.f - 34, easing: easeInOut }, { degrees: l.f, easing: easeInOut }],
-      [null, { degrees: l.t + 60, easing: easeInOut }, { step: l.t, easing: easeInOut }]
+      [null, null, false, { degrees: l.c, easing: easeOut }],
+      [null, null, false, { degrees: l.c, easing: easeOut }],
+      [null, { degrees: h.f.f[1] + 20, easing: easeOut }, { degrees: l.f, easing: easeInOut }],
+      [null, false, { degrees: l.t, easing: easeInOut }]
     ]
   };
 
@@ -191,7 +211,7 @@ board = new five.Board().on("ready", function() {
       phoenix.state = "stand";
     },
     keyFrames: [
-      [null, false, { degrees: 120, easing: easeInOut }, false, false, false, false, false, { degrees: 52, easing: easeInOut }, {copyDegrees: 0, easing: easeInOut} ], // r1c
+      [null, false, { degrees: 20, easing: easeInOut }, false, false, false, false, false, null, {copyDegrees: 0, easing: easeInOut} ], // r1c
       [null, { step: 55, easing: easeInOut }, false, false, false, false, false, false, { step: -55, easing: easeInOut }, {copyDegrees: 0, easing: easeInOut} ], // r1f
       [null, { degrees: 85, easing: easeInOut }, { degrees: 45, easing: easeInOut }, { step: -15, easing: easeInOut}, { step: 30, easing: easeInOut}, { copyDegrees: 3, easing: easeInOut}, { copyFrame: 4 }, { copyDegrees: 2, easing: easeInOut}, { copyFrame: 1 }, {copyDegrees: 0, easing: easeInOut} ]
     ]
@@ -206,7 +226,7 @@ board = new five.Board().on("ready", function() {
       phoenix.state = "stand";
     },
     keyFrames: [
-      [null, false, { degrees: 120, easing: easeInOut }, false, false, false, false, false, { degrees: 52, easing: easeInOut }, {copyDegrees: 0, easing: easeInOut} ], // l1c
+      [null, false, { degrees: 20, easing: easeInOut }, false, false, false, false, false, { degrees: 52, easing: easeInOut }, {copyDegrees: 0, easing: easeInOut} ], // l1c
       [null, { step: 55, easing: easeInOut }, false, false, false, false, false, false, { step: -55, easing: easeInOut }, {copyDegrees: 0, easing: easeInOut} ], // l1f
       [null, { degrees: 85, easing: easeInOut }, { degrees: 45, easing: easeInOut }, { step: -15, easing: easeInOut}, { step: 30, easing: easeInOut}, { copyDegrees: 3, easing: easeInOut}, { copyFrame: 4 }, { copyDegrees: 2, easing: easeInOut}, { copyFrame: 1 }, {copyDegrees: 0, easing: easeInOut} ]
     ]
@@ -389,8 +409,8 @@ board = new five.Board().on("ready", function() {
 
   // Tripod turn
   phoenix.turn = function(dir) {
-    var a = dir === "left" ? 0 : 2,
-      b = dir === "left" ? 2 : 0;
+    var a = dir === "left" ? 2 : 0,
+      b = dir === "left" ? 0 : 2;
 
     legsAnimation.enqueue({
       duration: 1500,
@@ -400,29 +420,29 @@ board = new five.Board().on("ready", function() {
       loopback: 0.5,
       onstop: function() { phoenix.att(); },
       keyFrames: [
-        [ null, null, {degrees: h.f.c[a]}, null, {degrees: h.f.c[b]}, null, {degrees: h.f.c[a]}],
-        [ null, null, {degrees: h.f.f[a]}, { step: lift.femur, easing: easeOut }, {degrees: h.f.f[b]}, null, {degrees: h.f.f[a]}],
-        [ null, null, {degrees: h.f.t[a]}, { step: lift.tibia, easing: easeOut }, {degrees: h.f.t[b]}, null, {degrees: h.f.t[a]}],
+        [ null, null, {degrees: t.f.c[a]}, null, {degrees: t.f.c[b]}, null, {degrees: t.f.c[a]}],
+        [ null, null, {degrees: t.f.f[a]}, { step: lift.femur, easing: easeOut }, {degrees: t.f.f[b]}, null, {degrees: t.f.f[a]}],
+        [ null, null, {degrees: t.f.t[a]}, { step: lift.tibia, easing: easeOut }, {degrees: t.f.t[b]}, null, {degrees: t.f.t[a]}],
 
-        [ null, null, {degrees: h.f.c[a]}, null, {degrees: h.f.c[b]}, null, {degrees: h.f.c[a]}],
-        [ null, { step: lift.femur, easing: easeOut }, {degrees: h.f.f[a], easing: easeIn}, null, {degrees: h.f.f[b], easing: easeIn}, { step: lift.femur, easing: easeOut }, {degrees: h.f.f[a], easing: easeIn}],
-        [ null, { step: lift.tibia, easing: easeOut }, {degrees: h.f.t[a], easing: easeIn}, null, {degrees: h.f.t[b], easing: easeIn}, { step: lift.tibia, easing: easeOut }, {degrees: h.f.t[a], easing: easeIn}],
+        [ null, null, {degrees: t.f.c[a]}, null, {degrees: t.f.c[b]}, null, {degrees: t.f.c[a]}],
+        [ null, { step: lift.femur, easing: easeOut }, {degrees: t.f.f[a], easing: easeIn}, null, {degrees: t.f.f[b], easing: easeIn}, { step: lift.femur, easing: easeOut }, {degrees: t.f.f[a], easing: easeIn}],
+        [ null, { step: lift.tibia, easing: easeOut }, {degrees: t.f.t[a], easing: easeIn}, null, {degrees: t.f.t[b], easing: easeIn}, { step: lift.tibia, easing: easeOut }, {degrees: t.f.t[a], easing: easeIn}],
 
-        [ null, null, {degrees: h.m.c[b]}, null, {degrees: h.m.c[a]}, null, {degrees: h.m.c[b]}],
-        [ null, { step: lift.femur, easing: easeOut }, {degrees: h.m.f[b], easing: easeIn}, null, {degrees: h.m.f[a], easing: easeIn}, { step: lift.femur, easing: easeOut }, {degrees: h.m.f[b], easing: easeIn}],
-        [ null, { step: lift.tibia, easing: easeOut }, {degrees: h.m.t[b], easing: easeIn}, null, {degrees: h.m.t[a], easing: easeIn}, { step: lift.tibia, easing: easeOut }, {degrees: h.m.t[b], easing: easeIn}],
+        [ null, null, {degrees: t.m.c[b]}, null, {degrees: t.m.c[a]}, null, {degrees: t.m.c[b]}],
+        [ null, { step: lift.femur, easing: easeOut }, {degrees: t.m.f[b], easing: easeIn}, null, {degrees: t.m.f[a], easing: easeIn}, { step: lift.femur, easing: easeOut }, {degrees: t.m.f[b], easing: easeIn}],
+        [ null, { step: lift.tibia, easing: easeOut }, {degrees: t.m.t[b], easing: easeIn}, null, {degrees: t.m.t[a], easing: easeIn}, { step: lift.tibia, easing: easeOut }, {degrees: t.m.t[b], easing: easeIn}],
 
-        [ null, null, {degrees: h.m.c[b]}, null, {degrees: h.m.c[a]}, null, {degrees: h.m.c[b]}],
-        [ null, null, {degrees: h.m.f[b]}, { step: lift.femur, easing: easeOut }, {degrees: h.m.f[a]}, null, {degrees: h.m.f[b]}],
-        [ null, null, {degrees: h.m.t[b]}, { step: lift.tibia, easing: easeOut }, {degrees: h.m.t[a]}, null, {degrees: h.m.t[b]}],
+        [ null, null, {degrees: t.m.c[b]}, null, {degrees: t.m.c[a]}, null, {degrees: t.m.c[b]}],
+        [ null, null, {degrees: t.m.f[b]}, { step: lift.femur, easing: easeOut }, {degrees: t.m.f[a]}, null, {degrees: t.m.f[b]}],
+        [ null, null, {degrees: t.m.t[b]}, { step: lift.tibia, easing: easeOut }, {degrees: t.m.t[a]}, null, {degrees: t.m.t[b]}],
 
-        [ null, null, {degrees: h.r.c[a]}, null, {degrees: h.r.c[b]}, null, {degrees: h.r.c[a]}],
-        [ null, null, {degrees: h.r.f[a]}, { step: lift.femur, easing: easeOut }, {degrees: h.r.f[b]}, null, {degrees: h.r.f[a]}],
-        [ null, null, {degrees: h.r.t[a]}, { step: lift.tibia, easing: easeOut }, {degrees: h.r.t[b]}, null, {degrees: h.r.t[a]}],
+        [ null, null, {degrees: t.r.c[b]}, null, {degrees: t.r.c[a]}, null, {degrees: t.r.c[b]}],
+        [ null, null, {degrees: t.r.f[b]}, { step: lift.femur, easing: easeOut }, {degrees: t.r.f[a]}, null, {degrees: t.r.f[b]}],
+        [ null, null, {degrees: t.r.t[b]}, { step: lift.tibia, easing: easeOut }, {degrees: t.r.t[a]}, null, {degrees: t.r.t[b]}],
 
-        [ null, null, {degrees: h.r.c[a]}, null, {degrees: h.r.c[b]}, null, {degrees: h.r.c[a]}],
-        [ null, { step: lift.femur, easing: easeOut }, {degrees: h.r.f[a], easing: easeIn}, null, {degrees: h.r.f[b], easing: easeIn}, { step: lift.femur, easing: easeOut }, {degrees: h.r.f[a], easing: easeIn}],
-        [ null, { step: lift.tibia, easing: easeOut }, {degrees: h.r.t[a], easing: easeIn}, null, {degrees: h.r.t[b], easing: easeIn}, { step: lift.tibia, easing: easeOut }, {degrees: h.r.t[a], easing: easeIn}]
+        [ null, null, {degrees: t.r.c[b]}, null, {degrees: t.r.c[a]}, null, {degrees: t.r.c[b]}],
+        [ null, { step: lift.femur, easing: easeOut }, {degrees: t.r.f[b], easing: easeIn}, null, {degrees: t.r.f[a], easing: easeIn}, { step: lift.femur, easing: easeOut }, {degrees: t.r.f[b], easing: easeIn}],
+        [ null, { step: lift.tibia, easing: easeOut }, {degrees: t.r.t[b], easing: easeIn}, null, {degrees: t.r.t[a], easing: easeIn}, { step: lift.tibia, easing: easeOut }, {degrees: t.r.t[b], easing: easeIn}]
       ]
     });
 
@@ -456,20 +476,20 @@ board = new five.Board().on("ready", function() {
       group.forEach(function(leg, j) {
         temporal.queue([
           {
-            delay: 250*i,
+            delay: 500*i,
             task: function() {
               phoenix[work[leg].name+"f"].to(work[leg].home + lift.femur);
               phoenix[work[leg].name+"t"].to(work[leg].thome + lift.tibia);
             }
           },
           {
-            delay: 50,
+            delay: 100,
             task: function() {
               phoenix[work[leg].name+"c"].to(work[leg].chome);
             }
           },
           {
-            delay: 50,
+            delay: 100,
             task: function() {
               phoenix[work[leg].name+"f"].to(work[leg].home);
               phoenix[work[leg].name+"t"].to(work[leg].thome);
