@@ -23,8 +23,8 @@ servos = {
 };
 
 sundial = {
-  latitude     : 21.307,
-  longitude    : -157.859,
+  latitude     : 45.52,
+  longitude    : -122.63,
   tickInterval : 5000,
   msPerDegree  : 50
 };
@@ -51,25 +51,25 @@ board.on('ready', function() {
         isFlipped = (position.azimuth > 180) ? true : false,
         aPos      = (isFlipped) ? position.azimuth - 180 : position.azimuth,
         ePos      = (isFlipped) ? 180 - position.elevation  : position.elevation,
-        aChange, eChange, aTime, eTime;
+        aChange, eChange, aTime, eTime, servoTime;
 
     aChange   = Math.abs(azimuthServo.value - aPos);
     eChange   = Math.abs(elevationServo.value - ePos);
     aTime     = aChange * sundial.msPerDegree;
     eTime     = eChange * sundial.msPerDegree;
+    servoTime = (aTime >= eTime) ? aTime : eTime;
 
     if (ticker) clearTimeout(ticker);
 
     if (position.elevation < 0) {
       console.log('It is nighttime, silly!');
-      ePos = 0;
+      return;
     }
     if (aChange || eChange) {
-      console.log('Sun position', position);
       azimuthServo.to(aPos, aTime);
       elevationServo.to(ePos, eTime);
     }
-    ticker = setTimeout(tick, sundial.tickInterval + eTime + aTime);
+    ticker = setTimeout(tick, sundial.tickInterval + servoTime);
   };
 
   tick();
