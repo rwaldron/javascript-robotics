@@ -3,12 +3,11 @@ var board = new five.Board();
 
 board.on("ready", function() {
 
-  // by default will use address 0x70
   var matrix = new five.Led.Matrix({
+    devices: 7,
     controller: "HT16K33",
     isBicolor: true
   });
-
 
   var heart = [
     "01100110",
@@ -21,11 +20,11 @@ board.on("ready", function() {
     "00000000"
   ];
 
-
   matrix.draw(heart);
-  
+
   this.repl.inject({
-    m: matrix
+    m: matrix,
+    heart: heart
   });
 
 });
