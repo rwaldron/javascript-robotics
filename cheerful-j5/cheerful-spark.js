@@ -13,12 +13,12 @@ var request = require("request"),
 board.on("ready", function() {
 
   var lastColor = "white",
-  var led = new five.Led.RGB({
-    pins: {
-      red: "A5",
-      green: "A6",
-      blue: "A7"
-    }
+    led = new five.Led.RGB({
+      pins: {
+        red: "A5",
+        green: "A6",
+        blue: "A7"
+      }
   });
 
   led.color( colorMap[lastColor] );
