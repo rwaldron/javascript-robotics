@@ -1,4 +1,4 @@
-/* global console, setTimeout, setInterval, clearTimeout */
+/* global console, require, setTimeout, setInterval, clearTimeout */
 'use strict';
 var five        = require('johnny-five'),
     sunCalc     = require('suncalc');
@@ -45,21 +45,18 @@ board.on('ready', function() {
   var tick = function tickTock() {
     console.log('tick!');
     var position  = sunPositionInDegrees(new Date(),
-          sundial.latitude,
-          sundial.longitude
-        ),
-        isFlipped = (position.azimuth > 180) ? true : false,
+                                         sundial.latitude,
+                                         sundial.longitude),
+        isFlipped = position.azimuth > 180,
         aPos      = (isFlipped) ? position.azimuth - 180 : position.azimuth,
         ePos      = (isFlipped) ? 180 - position.elevation  : position.elevation,
-        aChange, eChange, aTime, eTime, servoTime;
+        aChange   = Math.abs(azimuthServo.value - aPos),
+        eChange   = Math.abs(elevationServo.value - ePos),
+        aTime     = aChange * sundial.msPerDegree,
+        eTime     = eChange * sundial.msPerDegree,
+        servoTime = (aTime >= eTime) ? aTime : eTime;
 
-    aChange   = Math.abs(azimuthServo.value - aPos);
-    eChange   = Math.abs(elevationServo.value - ePos);
-    aTime     = aChange * sundial.msPerDegree;
-    eTime     = eChange * sundial.msPerDegree;
-    servoTime = (aTime >= eTime) ? aTime : eTime;
-
-    if (ticker) clearTimeout(ticker);
+    if (ticker) { clearTimeout(ticker); }
 
     if (position.elevation < 0) {
       console.log('It is nighttime, silly!');
