@@ -1,0 +1,12 @@
+{
+  "name": "meowshoes",
+  "description": "musical shoes",
+  "author": "Suz Hinton <susan@owlposse.com>",
+  "dependencies": {
+    "johnny-five": "~0.8.8",
+    "socket.io": "^1.1.0"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  }
+}
