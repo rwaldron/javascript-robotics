@@ -1,0 +1,36 @@
+{
+  "name": "simplebot",
+  "version": "0.0.1",
+  "description": "SimpleBot files and examples for NodeBots book",
+  "main": "examples/simplebot.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rwaldron/the-book"
+  },
+  "keywords": [
+    "nodebots",
+    "johnny-five",
+    "simplebot",
+    "robot",
+    "robotics",
+    "arduino",
+    "firmata"
+  ],
+  "author": "Andrew Fisher <ajfisher.td@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rwaldron/the-book/issues"
+  },
+  "homepage": "https://github.com/rwaldron/the-book",
+  "dependencies": {
+    "johnny-five": "^0.8.11",
+    "keypress": "^0.2.1",
+    "temporal": "^0.3.8"
+  }
+}
