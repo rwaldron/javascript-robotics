@@ -1,0 +1,16 @@
+{
+  "name": "BBB-RGB-LED-Code",
+  "version": "0.0.1",
+  "description": "Code for my chapter in the Making Robots with JS Book",
+  "main": "open-pixel-test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "nodebotanist",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "open-pixel-control": "~0.1.2",
+    "beaglebone-io": "~1.0.0",
+    "johnny-five": "~0.8.14"
+  }
+}
