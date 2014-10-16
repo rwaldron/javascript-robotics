@@ -93,39 +93,39 @@
 board = new five.Board().on("ready", function() {
 
   // Right front leg
-  phoenix.r1c = new five.Servo({pin:40, offset: 32, startAt: l.c, range: [50, 180], isInverted: true });
-  phoenix.r1f = new five.Servo({pin:39, offset: -2, startAt:  l.f, range: [25, 165] });
-  phoenix.r1t = new five.Servo({pin:38, offset: -4, startAt: l.t });
+  phoenix.r1c = new five.Servo({pin:40, offset: 0, startAt: l.c, range: [50, 180], isInverted: true });
+  phoenix.r1f = new five.Servo({pin:39, offset: 0, startAt:  l.f, range: [25, 165] });
+  phoenix.r1t = new five.Servo({pin:38, offset: 0, startAt: l.t });
   phoenix.r1 = new five.Servo.Array([ phoenix.r1c, phoenix.r1f, phoenix.r1t ]);
 
   //Left front leg
-  phoenix.l1c = new five.Servo({pin:27, offset: 61, startAt: l.c, range: [50, 180] });
-  phoenix.l1f = new five.Servo({pin:26, offset: -4, startAt: l.f, range: [25, 165], isInverted: true });
-  phoenix.l1t = new five.Servo({pin:25, offset: 1, startAt: l.t, isInverted: true });
+  phoenix.l1c = new five.Servo({pin:27, offset: 0, startAt: l.c, range: [50, 180] });
+  phoenix.l1f = new five.Servo({pin:26, offset: 0, startAt: l.f, range: [25, 165], isInverted: true });
+  phoenix.l1t = new five.Servo({pin:25, offset: 0, startAt: l.t, isInverted: true });
   phoenix.l1 = new five.Servo.Array([ phoenix.l1c, phoenix.l1f, phoenix.l1t ]);
 
   //Right mid leg
-  phoenix.r2c = new five.Servo({pin:49, offset: -6, startAt: l.c, range: [50, 130], isInverted: true });
-  phoenix.r2f = new five.Servo({pin:48, offset: -12, startAt: l.f, range: [25, 165] });
-  phoenix.r2t = new five.Servo({pin:47, offset: -13, startAt: l.t });
+  phoenix.r2c = new five.Servo({pin:49, offset: 0, startAt: l.c, range: [50, 130], isInverted: true });
+  phoenix.r2f = new five.Servo({pin:48, offset: 0, startAt: l.f, range: [25, 165] });
+  phoenix.r2t = new five.Servo({pin:47, offset: 0, startAt: l.t });
   phoenix.r2 = new five.Servo.Array([ phoenix.r2c, phoenix.r2f, phoenix.r2t ]);
 
   //Left mid leg
-  phoenix.l2c = new five.Servo({pin:23, offset: 8, startAt: l.c, range: [50, 130] });
-  phoenix.l2f = new five.Servo({pin:21, offset: 2, startAt: l.f, range: [25, 165], isInverted: true });
-  phoenix.l2t = new five.Servo({pin:20, offset: -3, startAt: l.t, isInverted: true });
+  phoenix.l2c = new five.Servo({pin:23, offset: 0, startAt: l.c, range: [50, 130] });
+  phoenix.l2f = new five.Servo({pin:21, offset: 0, startAt: l.f, range: [25, 165], isInverted: true });
+  phoenix.l2t = new five.Servo({pin:20, offset: 0, startAt: l.t, isInverted: true });
   phoenix.l2 = new five.Servo.Array([ phoenix.l2c, phoenix.l2f, phoenix.l2t ]);
 
   //Right rear leg
-  phoenix.r3c = new five.Servo({pin:45, offset: 67, startAt: l.c, range: [50, 180]});
-  phoenix.r3f = new five.Servo({pin:44, offset: -11, startAt: l.f, range: [25, 165] });
-  phoenix.r3t = new five.Servo({pin:43, offset: -6, startAt: l.t });
+  phoenix.r3c = new five.Servo({pin:45, offset: 0, startAt: l.c, range: [50, 180]});
+  phoenix.r3f = new five.Servo({pin:44, offset: 0, startAt: l.f, range: [25, 165] });
+  phoenix.r3t = new five.Servo({pin:43, offset: 0, startAt: l.t });
   phoenix.r3 = new five.Servo.Array([ phoenix.r3c, phoenix.r3f, phoenix.r3t ]);
 
   //Left rear leg
-  phoenix.l3c = new five.Servo({pin:19, offset: 11, startAt: l.c, range: [50, 180], isInverted: true });
-  phoenix.l3f = new five.Servo({pin:18, offset: -6, startAt: l.f, range: [25, 165], isInverted: true });
-  phoenix.l3t = new five.Servo({pin:17, offset: -8, startAt: l.t, isInverted: true });
+  phoenix.l3c = new five.Servo({pin:19, offset: 0, startAt: l.c, range: [50, 180], isInverted: true });
+  phoenix.l3f = new five.Servo({pin:18, offset: 0, startAt: l.f, range: [25, 165], isInverted: true });
+  phoenix.l3t = new five.Servo({pin:17, offset: 0, startAt: l.t, isInverted: true });
   phoenix.l3 = new five.Servo.Array([ phoenix.l3c, phoenix.l3f, phoenix.l3t ]);
 
   //Servos grouped by joints (used in stand)
@@ -190,6 +190,7 @@ board = new five.Board().on("ready", function() {
     duration: 500,
     cuePoints: [0, 0.5, 0.75, 1.0],
     fps: 100,
+    easing: easeOut,
     target: phoenix.altJoints,
     oncomplete: function() {
       phoenix.state = "sleep";
