@@ -1,0 +1,36 @@
+{
+  "name": "piDuino5-webapp",
+  "description": "Frontend for piDuino5 - a mobile robot built on johnny-five",
+  "homepage": "https://github.com/beriberikix/piDuino5-webapp",
+  "version": "0.0.1",
+  "author": {
+    "name": "Jonathan Beri <jmberi@gmail.com>",
+    "email": "jmberi@gmail.com"
+  },
+  "keywords": [
+    "arduino",
+    "raspberrypi",
+    "firmata",
+    "robot",
+    "raspberry pi",
+    "rpi",
+    "johnny-five"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/beriberikix/piDuino5-webapp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/beriberikix/piDuino5-webapp/issues"
+  },
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "https://github.com/beriberikix/piDuino5-webapp/blob/master/LICENSE"
+    }
+  ],
+  "dependencies": {
+    "express": "4.x",
+    "ejs": "^1.0.0"
+  }
+}

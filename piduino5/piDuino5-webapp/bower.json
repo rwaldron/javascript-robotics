@@ -1,0 +1,28 @@
+{
+  "name": "piDuino5-webapp",
+  "version": "0.0.1",
+  "homepage": "https://github.com/beriberikix/piDuino5",
+  "authors": [
+    "Jonathan Beri <jmberi@gmail.com>"
+  ],
+  "description": "Frontend for piDuino5",
+  "main": "index.html",
+  "keywords": [
+    "raspberrypi",
+    "rpi",
+    "arduno",
+    "johnny-five"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "virtualjoystick.js": "*",
+    "uri.js": "~1.14.1"
+  }
+}

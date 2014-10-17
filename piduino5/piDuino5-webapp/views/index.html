@@ -1,0 +1,70 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+  <style>
+    body {
+      overflow : hidden;
+      padding : 0;
+      margin : 0;
+      background-color : #BBB;
+    }
+    #container {
+      width : 100%;
+      height : 100%;
+      overflow : hidden;
+      padding : 0;
+      margin : 0;
+      -webkit-user-select : none;
+      -moz-user-select : none;
+    }
+  </style>
+
+  <title>PiDuino</title>
+</head>
+<body>
+
+<div id="container">
+  <button id="forward" disabled="disabled">Forward</button>
+  <button id="reverse" disabled="disabled">Reverse</button>
+</div>
+
+<script src="/bower_components/virtualjoystick.js/virtualjoystick.js"></script>
+<script src="/bower_components/uri.js/src/URI.min.js"></script>
+<script>
+  var ws = new WebSocket('ws://' + URI('<%= publicurl %>').host());
+
+  var joystick  = new VirtualJoystick({
+    container : document.getElementById('container'),
+    mouseSupport : true
+  });
+
+  function step(timestamp) {
+    if( joystick.up() ) {
+      ws.send('forward');
+    }
+
+    if( joystick.down() ) {
+      ws.send('reverse');
+    }
+
+    if( joystick.right() ) {
+      ws.send('turnRight');
+    } 
+
+    if( joystick.left() ) {
+      ws.send('turnLeft');
+    }
+
+    if( joystick.deltaX() === 0 && joystick.deltaY() === 0 && ws.readyState === 1) {
+      ws.send('stop');
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  requestAnimationFrame(step);
+</script>
+</body>
+</html>
