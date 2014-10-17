@@ -1,0 +1,38 @@
+{
+  "name": "piDuino5",
+  "description": "A mobile robot built on johnny-five",
+  "homepage": "https://github.com/beriberikix/piDuino5",
+  "version": "1.0.0",
+  "author": {
+    "name": "Jonathan Beri <jmberi@gmail.com>",
+    "email": "jmberi@gmail.com"
+  },
+  "keywords": [
+    "arduino",
+    "raspberrypi",
+    "firmata",
+    "robot",
+    "raspberry pi",
+    "rpi",
+    "johnny-five"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/beriberikix/piDuino5.git"
+  },
+  "bugs": {
+    "url": "https://github.com/beriberikix/piDuino5/issues"
+  },
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "https://github.com/beriberikix/piDuino5/blob/master/LICENSE"
+    }
+  ],
+  "dependencies": {
+    "ws": "~0.4.32",
+    "localtunnel": "~1.4.0",
+    "johnny-five": "~0.8.14",
+    "request": "~2.45.0"
+  }
+}
