@@ -47,19 +47,19 @@
   // This object contains our end effector positions for turns
   t = {
     f: {
-      c: [47, 70, 93 ],
-      f: [122, 120, 116],
-      t: [117, 110, 97]
+      c: [56, 70, 85 ],
+      f: [121, 120, 119],
+      t: [117, 110, 105]
     },
     m: {
-      c: [65, 88, 113],
-      f: [117, 117, 117],
-      t: [101, 106, 103]
+      c: [73, 88, 105],
+      f: [118, 117, 118],
+      t: [107, 106, 107]
     },
     r: {
-      c: [47, 70, 93 ],
-      f: [122, 120, 116],
-      t: [117, 110, 97]
+      c: [56, 70, 85 ],
+      f: [121, 120, 119],
+      t: [117, 110, 105]
     }
   },
 
@@ -467,7 +467,9 @@ board = new five.Board().on("ready", function() {
       work[i].offset = Math.abs(phoenix[leg.name+"f"].last.reqDegrees - leg.home);
     });
 
-    if (work[1].offset > work[4].offset) {
+    var moving = _.max(work, function(leg){ return leg.offset; });
+
+    if (moving.name === "r2" || moving.name === "l1" || moving.name === "l3") {
       grouped = [ [1, 3, 5], [0, 2, 4] ];
     } else {
       grouped = [ [0, 2, 4], [1, 3, 5] ];

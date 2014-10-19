@@ -5,7 +5,8 @@
   "main": "phoenix.js",
   "dependencies": {
     "temporal": "^0.3.8",
-    "johnny-five": "^0.8.14"
+    "johnny-five": "^0.8.14",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {},
   "scripts": {
