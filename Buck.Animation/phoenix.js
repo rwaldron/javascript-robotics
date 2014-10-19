@@ -467,7 +467,9 @@ board = new five.Board().on("ready", function() {
       work[i].offset = Math.abs(phoenix[leg.name+"f"].last.reqDegrees - leg.home);
     });
 
-    if (work[1].offset > work[4].offset) {
+    var moving = _.max(work, function(leg){ return leg.offset; });
+
+    if (moving.name === "r2" || moving.name === "l1" || moving.name === "l3") {
       grouped = [ [1, 3, 5], [0, 2, 4] ];
     } else {
       grouped = [ [0, 2, 4], [1, 3, 5] ];
