@@ -1,0 +1,10 @@
+{
+  "name": "batbot",
+  "version": "0.3.0",
+  "dependencies": {
+    "johnny-five": "^0.7.30",
+    "temporal": "0.2.8",
+    "dualshock-controller": "^0.6.3",
+    "array-extended": "0.0.9"
+  }
+}
