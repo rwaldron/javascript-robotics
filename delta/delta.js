@@ -1,5 +1,7 @@
-five = require("johnny-five");
-ik = require("./ik");
+five = require("johnny-five"),
+  temporal = require("temporal"),
+  ik = require("./ik");
+
 board = new five.Board({
   debug: false
 });
@@ -38,47 +40,21 @@ board.on("ready", function() {
       s3: servo3,
     });
 
-    // Move to starting point
-    var max = 15;
-    var min = 5;
-    var range = max - min;
-    servo1.to(min);
-    servo2.to(min);
-    servo3.to(min);
+    go(0,0,-150);
 
-    var dance = function() {
-      servo1.to(parseInt((Math.random() * range) + min, 10));
-      servo2.to(parseInt((Math.random() * range) + min, 10));
-      servo3.to(parseInt((Math.random() * range) + min, 10));
-    };
-
-    var dancer;
-
-    start_dance = function() {
-      if (!dancer) dancer = setInterval(dance, 250);
+    var test = function() {
+      temporal.queue([
+        { delay: 250, task: function() { servo1.to(60); } },
+        { delay: 250, task: function() { servo2.to(60); } },
+        { delay: 250, task: function() { servo3.to(60); } },
+        { delay: 250, task: function() { go(0,0,-150, 1000);  } },
+        { delay: 1250, task: function() { go(0,0,-190, 1000);  } },
+        { delay: 1250, task: function() { servo1.to(20); } },
+        { delay: 250, task: function() { servo2.to(20); } },
+        { delay: 250, task: function() { servo3.to(20); } }
+      ]);
     }
-
-    stop_dance = function() {
-      if (dancer) {
-        clearInterval(dancer);
-        dancer = null;
-      }
-    }
-
-
-    jiggle = function() {
-      servo1.to(max);
-      servo2.to(max);
-      servo3.to(max);
-    }
-
-
-    board.repl.inject({
-      dance: start_dance,
-      chill: stop_dance,
-      jiggle: jiggle
-    });
-
+    test();
 
 });
 
@@ -114,17 +90,18 @@ cos = function(degree) {
 
 
 // TODO: pull out map values to config file or some other solution.
-go = function(x, y, z) {
+go = function(x, y, z, ms) {
   reflected = reflect(x,y);
   rotated = rotate(reflected[0],reflected[1]);
-
+  
   angles = ik.inverse(rotated[0], rotated[1], z);
-  servo1.to((angles[1]).map( 0 , 90 , 8 , 90 ));
-  servo2.to((angles[2]).map( 0 , 90 , 8 , 90 ));
-  servo3.to((angles[3]).map( 0 , 90 , 8 , 90 ));
+  servo1.to((angles[1]).map( 0 , 90 , 8 , 90 ), ms);
+  servo2.to((angles[2]).map( 0 , 90 , 8 , 90 ), ms);
+  servo3.to((angles[3]).map( 0 , 90 , 8 , 90 ), ms);
   console.log(angles);
 }
 
 position = function() {
   return ik.forward(servo1.last.degrees, servo2.last.degrees, servo3.last.degrees);
 }
+
