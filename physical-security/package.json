@@ -1,0 +1,27 @@
+{
+  "name": "orobos",
+  "version": "1.0.0",
+  "description": "johnny-five does physical security",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nexxy/orobos.git"
+  },
+  "keywords": [
+    "johnny-five",
+    "arduino",
+    "physical",
+    "security",
+    "alarm",
+  ],
+  "author": "Emily Rose <emily@contactvibe.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nexxy/orobos/issues"
+  },
+  "homepage": "https://github.com/nexxy/orobos",
+  "dependencies": {
+    "johnny-five": "^0.8.14",
+    "twilio": "^1.7.0"
+  }
+}
