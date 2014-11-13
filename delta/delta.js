@@ -13,7 +13,8 @@
       
 */
 
-var five = require("johnny-five");
+var five = require("johnny-five"),
+    temporal = require("temporal");
 
 // Delta Geometry - put your measurements here!
 var e = 34.64101615137754,
@@ -23,8 +24,8 @@ var e = 34.64101615137754,
 
 // Calculates angle theta1 (for YZ-pane)
 function delta_calcAngleYZ(x0, y0, z0) {
-  var y1 = -0.5 * 0.57735 * f, // f/2 * tan(30 degrees)
-      y0 -= 0.5 * 0.57735 * e; // Shift center to edge of effector
+  var y1 = -0.5 * 0.57735 * f; // f/2 * tan(30 degrees)
+  y0 -= 0.5 * 0.57735 * e; // Shift center to edge of effector
 
   // z = a + b*y
   var a = (x0 * x0 + y0 * y0 + z0 * z0 + rf * rf - re * re - y1 * y1) / (2.0 * z0),
@@ -45,7 +46,7 @@ function delta_calcAngleYZ(x0, y0, z0) {
   return [0, theta]; // Return error, theta
 };
 
-// Calculate theta for each angle
+// Calculate theta for each arm
 function inverse(x0, y0, z0) {
   var theta1 = 0,
       theta2 = 0,
@@ -69,9 +70,7 @@ function inverse(x0, y0, z0) {
 };
 
 
-var board = new five.Board({
-  debug: false
-});
+var board = new five.Board();
 
 board.on("ready", function() {
 
@@ -89,7 +88,7 @@ board.on("ready", function() {
         range: [0, 90]
     });
 
-    var go = function(x, y, z, ms) {
+    function go(x, y, z, ms) {
       var angles = inverse(x, y, z);
       servo1.to(angles[1], ms);
       servo2.to(angles[2], ms);
@@ -97,10 +96,22 @@ board.on("ready", function() {
       console.log(angles);
     };
 
+    function box() {
+      temporal.queue([
+        { delay: 250, task: function() { go( 30,  30, -160, 250); } },
+        { delay: 250, task: function() { go( 30, -30, -160, 250); } },
+        { delay: 250, task: function() { go(-30, -30, -160, 250); } },
+        { delay: 250, task: function() { go(-30,  30, -160, 250); } },
+        { delay: 250, task: function() { go( 30,  30, -160, 250); } }
+      ]);
+    }
+
     board.repl.inject({
-      go: go
+      go: go,
+      box: box
     });
 
+    // Initial position
     go(0,0,-150);
 
 });
