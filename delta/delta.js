@@ -1,107 +1,106 @@
-five = require("johnny-five"),
-  temporal = require("temporal"),
-  ik = require("./ik");
+/* 
+  ============================
+  Moving around a delta robot!
+  ============================
 
-board = new five.Board({
+  Code adapted from mzavatsky's post on Trossen Robotics:
+
+  http://forums.trossenrobotics.com/tutorials/introduction-129/delta-robot-kinematics-3276/
+
+  and from TapsterBot by Jason Huggins:
+
+  https://github.com/hugs/tapsterbot
+      
+*/
+
+var five = require("johnny-five");
+
+// Delta Geometry - put your measurements here!
+var e = 34.64101615137754,
+    f = 110.85125168440814,
+    re = 153.5,
+    rf = 52.690131903421914;
+
+// Calculates angle theta1 (for YZ-pane)
+function delta_calcAngleYZ(x0, y0, z0) {
+  var y1 = -0.5 * 0.57735 * f, // f/2 * tan(30 degrees)
+      y0 -= 0.5 * 0.57735 * e; // Shift center to edge of effector
+
+  // z = a + b*y
+  var a = (x0 * x0 + y0 * y0 + z0 * z0 + rf * rf - re * re - y1 * y1) / (2.0 * z0),
+      b = (y1 - y0) / z0;
+
+  // Discriminant
+  var d = -(a + b * y1) * (a + b * y1) + rf * (b * b * rf + rf);
+  if (d < 0) {
+    // Non-existing position. return early with error.
+    return [1, 0]; 
+  }
+
+  // Choose outer position of cicle
+  var yj = (y1 - a * b - Math.sqrt(d)) / (b * b + 1); 
+  var zj = a + b * yj;
+  var theta = Math.atan(-zj / (y1 - yj)) * 180.0 / Math.PI + ((yj > y1) ? 180.0 : 0.0);
+
+  return [0, theta]; // Return error, theta
+};
+
+// Calculate theta for each angle
+function inverse(x0, y0, z0) {
+  var theta1 = 0,
+      theta2 = 0,
+      theta3 = 0,
+      cos120 = Math.cos(Math.PI * (120/180)),
+      sin120 = Math.sin(Math.PI * (120/180)),
+      status = delta_calcAngleYZ(x0, y0, z0);
+
+  if (status[0] === 0) {
+    theta1 = status[1];
+    status = delta_calcAngleYZ(x0 * cos120 + y0 * sin120, y0 * cos120 - x0 * sin120, z0, theta2);
+  }
+
+  if (status[0] === 0) {
+    theta2 = status[1];
+    status = delta_calcAngleYZ(x0 * cos120 - y0 * sin120, y0 * cos120 + x0 * sin120, z0, theta3);
+    theta3 = status[1];    
+  }
+
+  return [status[0], theta1, theta2, theta3];
+};
+
+
+var board = new five.Board({
   debug: false
 });
 
 board.on("ready", function() {
+
     // Setup
-    servo1 = five.Servo({
+    var servo1 = five.Servo({
         pin: 9,
         range: [0,90]
     });
-    servo2 = five.Servo({
+    var servo2 = five.Servo({
         pin: 10,
         range: [0,90]
     });
-    servo3 = five.Servo({
+    var servo3 = five.Servo({
         pin: 11,
         range: [0, 90]
     });
 
-    servo1.on("error", function() {
-      console.log(arguments);
-    })
-    servo2.on("error", function() {
-      console.log(arguments);
-    })
-    servo3.on("error", function() {
-      console.log(arguments);
-    })
+    var go = function(x, y, z, ms) {
+      var angles = inverse(x, y, z);
+      servo1.to(angles[1], ms);
+      servo2.to(angles[2], ms);
+      servo3.to(angles[3], ms);
+      console.log(angles);
+    };
 
     board.repl.inject({
-      servo1: servo1,
-      s1: servo1,
-      servo2: servo2,
-      s2: servo2,
-      servo3: servo3,
-      s3: servo3,
+      go: go
     });
 
     go(0,0,-150);
 
-    var test = function() {
-      temporal.queue([
-        { delay: 250, task: function() { servo1.to(60); } },
-        { delay: 250, task: function() { servo2.to(60); } },
-        { delay: 250, task: function() { servo3.to(60); } },
-        { delay: 250, task: function() { go(0,0,-150, 1000);  } },
-        { delay: 1250, task: function() { go(0,0,-190, 1000);  } },
-        { delay: 1250, task: function() { servo1.to(20); } },
-        { delay: 250, task: function() { servo2.to(20); } },
-        { delay: 250, task: function() { servo3.to(20); } }
-      ]);
-    }
-    test();
-
 });
-
-
-Number.prototype.map = function ( in_min , in_max , out_min , out_max ) {
-  return ( this - in_min ) * ( out_max - out_min ) / ( in_max - in_min ) + out_min;
-}
-
-rotate = function(x,y) {
-    var theta = -60;
-    x1 = x * cos(theta) - y * sin(theta);
-    y1 = y * cos(theta) + x * sin(theta);
-    return [x1,y1]
-}
-
-reflect = function(x,y) {
-    var theta = 0;
-    x1 = x;
-    y1 = x * sin(2*theta) - y * cos(2*theta);
-    return [x1,y1]
-}
-
-
-// A sine function for working with degrees, not radians
-sin = function(degree) {
-    return Math.sin(Math.PI * (degree/180));
-}
-
-// A cosine function for working with degrees, not radians
-cos = function(degree) {
-    return Math.cos(Math.PI * (degree/180));
-}
-
-
-// TODO: pull out map values to config file or some other solution.
-go = function(x, y, z, ms) {
-  reflected = reflect(x,y);
-  rotated = rotate(reflected[0],reflected[1]);
-  
-  angles = ik.inverse(rotated[0], rotated[1], z);
-  servo1.to((angles[1]).map( 0 , 90 , 8 , 90 ), ms);
-  servo2.to((angles[2]).map( 0 , 90 , 8 , 90 ), ms);
-  servo3.to((angles[3]).map( 0 , 90 , 8 , 90 ), ms);
-  console.log(angles);
-}
-
-position = function() {
-  return ik.forward(servo1.last.degrees, servo2.last.degrees, servo3.last.degrees);
-}
-
