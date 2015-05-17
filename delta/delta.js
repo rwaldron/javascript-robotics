@@ -1,4 +1,4 @@
-/* 
+/*
   ============================
   Moving around a delta robot!
   ============================
@@ -10,17 +10,17 @@
   and from TapsterBot by Jason Huggins:
 
   https://github.com/hugs/tapsterbot
-      
+
 */
 
 var five = require("johnny-five"),
     temporal = require("temporal");
 
 // Delta Geometry - put your measurements here!
-var e = 34.64101615137754,
-    f = 110.85125168440814,
-    re = 153.5,
-    rf = 52.690131903421914;
+var e = 80.25,
+    f = 163,
+    re = 155,
+    rf = 128.75;
 
 // Calculates angle theta1 (for YZ-pane)
 function delta_calcAngleYZ(x0, y0, z0) {
@@ -35,11 +35,11 @@ function delta_calcAngleYZ(x0, y0, z0) {
   var d = -(a + b * y1) * (a + b * y1) + rf * (b * b * rf + rf);
   if (d < 0) {
     // Non-existing position. return early with error.
-    return [1, 0]; 
+    return [1, 0];
   }
 
   // Choose outer position of cicle
-  var yj = (y1 - a * b - Math.sqrt(d)) / (b * b + 1); 
+  var yj = (y1 - a * b - Math.sqrt(d)) / (b * b + 1);
   var zj = a + b * yj;
   var theta = Math.atan(-zj / (y1 - yj)) * 180.0 / Math.PI + ((yj > y1) ? 180.0 : 0.0);
 
@@ -63,7 +63,7 @@ function inverse(x0, y0, z0) {
   if (status[0] === 0) {
     theta2 = status[1];
     status = delta_calcAngleYZ(x0 * cos120 - y0 * sin120, y0 * cos120 + x0 * sin120, z0, theta3);
-    theta3 = status[1];    
+    theta3 = status[1];
   }
 
   return [status[0], theta1, theta2, theta3];
