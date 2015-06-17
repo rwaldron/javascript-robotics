@@ -22,17 +22,15 @@ var SERVO_CONFIG = {
     shoulder: {
       pin: 3,
       startPosition: 90,
-      isInverted: false
     },
     elbow: {
       pin: 6,
       startPosition: 60,
-      isInverted: false
     },
     wrist: {
       pin: 5,
       startPosition: 30,
-      isInverted: true
+      invert: true
     }
   },
   rate: SERVO_RATE,
