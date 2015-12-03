@@ -18,6 +18,8 @@ board.on("ready", function() {
 
     var left_wheel  = new five.Servo({ pin:  9, type: 'continuous' });
     var right_wheel = new five.Servo({ pin: 8, type: 'continuous'  });
+    left_wheel.stop();
+    right_wheel.stop();
 
     process.stdin.resume(); 
     process.stdin.setEncoding('utf8'); 
