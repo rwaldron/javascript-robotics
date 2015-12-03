@@ -8,7 +8,7 @@ var colorMap = {
   "oldlace" : "#fdf5e6", // same as warmwhite
   "purple" : "#a020f0",
   "magenta" : "#ff00ff",
-  "pink" : "#ff00ff",
+  "pink" : "#ff69b4",
   "yellow" : "#ffff00",
   "orange" : "#ff8c00"
 };
